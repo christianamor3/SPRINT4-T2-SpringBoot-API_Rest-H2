@@ -1,4 +1,4 @@
-package cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.domain;
+package cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
