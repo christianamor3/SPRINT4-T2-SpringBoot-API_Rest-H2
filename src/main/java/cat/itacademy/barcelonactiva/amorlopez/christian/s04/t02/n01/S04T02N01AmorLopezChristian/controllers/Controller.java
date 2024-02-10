@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.domain.FruitaEntity;
 import cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.services.FruitaEntityServiceImp;
@@ -24,30 +26,54 @@ public class Controller {
 	FruitaEntityServiceImp fruitaEntityServiceImp;
 	
 	@PostMapping("/add")
-	public FruitaEntity addFruita(@RequestBody FruitaEntity fruita) {
-		fruitaEntityServiceImp.save(fruita);
-		return fruita;
+	public ResponseEntity<FruitaEntity> createFruitaEntity(@RequestBody FruitaEntity fruita) {
+		FruitaEntity fruitaEntity = fruitaEntityServiceImp.save(fruita);
+
+		if (fruitaEntity != null){
+			return ResponseEntity.created(fruitaEntity);
+		} else {
+			return ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PutMapping("/update/{id}")
-	public FruitaEntity updateFruitaEntity(@PathVariable int id, @RequestBody FruitaEntity fruita) {
-		fruitaEntityServiceImp.update(id, fruita);
-		return fruita;
+	public ResponseEntity<FruitaEntity> updateFruitaEntity(@PathVariable int id, @RequestBody FruitaEntity fruita) {
+		FruitaEntity fruitaEntity = fruitaEntityServiceImp.update(id, fruita);
+		
+		if (fruitaEntity != null){
+			return ResponseEntity.ok(fruitaEntity);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public String deleteFruitaEntity (@PathVariable int id) {
-		return fruitaEntityServiceImp.delete(id);
+	public ResponseEntity<String> deleteFruitaEntity (@PathVariable int id) {
+		fruitaEntityServiceImp.delete(id);
+
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/getAll")
-	public List<FruitaEntity> getAllFruitaEntity() {
-		return fruitaEntityServiceImp.findAll();
+	public ResponseEntity<List<FruitaEntity>> getAllFruitaEntity() {
+		List<FruitaEntity> fruites = fruitaEntityServiceImp.findAll();
+
+		if (fruites.isEmpty()){
+			return ResponseEntity.notFound().build();
+		} else {
+			return ResponseEntity.ok(fruites);
+		}
 	}
 	
 	@GetMapping("/getOne/{id}")
-	public FruitaEntity getOneFruitaEntity (@PathVariable int id){
-		return fruitaEntityServiceImp.findById(id);
+	public ResponseEntity<FruitaEntity> getOneFruitaEntity (@PathVariable int id){
+		FruitaEntity fruitaEntity = fruitaEntityServiceImp.findById(id);
+
+		if (fruitaEntity != null) {
+			return ResponseEntity.ok(fruitaEntity);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 
