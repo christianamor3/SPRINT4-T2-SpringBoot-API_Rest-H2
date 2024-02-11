@@ -2,6 +2,7 @@ package cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01Am
 
 import java.util.List;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +30,8 @@ public class Controller {
 	public ResponseEntity<FruitaEntity> createFruitaEntity(@RequestBody FruitaEntity fruita) {
 		FruitaEntity fruitaEntity = fruitaEntityServiceImp.save(fruita);
 
-		if (fruitaEntity != null){
-			return ResponseEntity.created(fruitaEntity);
-		} else {
-			return ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return ResponseEntity.status(HttpStatus.CREATED).body(fruitaEntity);
+		
 	}
 	
 	@PutMapping("/update/{id}")
@@ -43,15 +41,15 @@ public class Controller {
 		if (fruitaEntity != null){
 			return ResponseEntity.ok(fruitaEntity);
 		} else {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 		}
 	}
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteFruitaEntity (@PathVariable int id) {
-		fruitaEntityServiceImp.delete(id);
-
-		return ResponseEntity.noContent().build();
+		String mensaje = fruitaEntityServiceImp.delete(id);
+		
+		return ResponseEntity.ok(mensaje);
 	}
 	
 	@GetMapping("/getAll")
@@ -67,10 +65,10 @@ public class Controller {
 	
 	@GetMapping("/getOne/{id}")
 	public ResponseEntity<FruitaEntity> getOneFruitaEntity (@PathVariable int id){
-		FruitaEntity fruitaEntity = fruitaEntityServiceImp.findById(id);
+		Optional<FruitaEntity> fruitaEntityOptional= fruitaEntityServiceImp.findById(id);
 
-		if (fruitaEntity != null) {
-			return ResponseEntity.ok(fruitaEntity);
+		if (fruitaEntityOptional.isPresent()) {
+			return ResponseEntity.ok(fruitaEntityOptional.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}

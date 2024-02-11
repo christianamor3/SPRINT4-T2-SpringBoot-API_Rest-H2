@@ -1,11 +1,13 @@
 package cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.domain.FruitaEntity;
 import cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.repository.FruitaEntityRepository;
+import cat.itacademy.barcelonactiva.amorlopez.christian.s04.t02.n01.S04T02N01AmorLopezChristian.model.domain.FruitaEntity;
 
 @Service
 public class FruitaEntityServiceImp implements FruitaEntityService{
@@ -39,8 +41,8 @@ public class FruitaEntityServiceImp implements FruitaEntityService{
 	}
 
 	
-	public FruitaEntity findById(int id) {
-		return fruitaEntityRepository.findById(id).get();
+	public Optional<FruitaEntity> findById(int id) {
+		return fruitaEntityRepository.findById(id);
 	}
 
 }
